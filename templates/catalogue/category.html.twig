@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Catégories</h5>
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action"
+                       href="{{ path('catalogue_index') }}">
+                        Toutes
+                    </a>
+                    {% for cat in categories %}
+                        <a class="list-group-item list-group-item-action {% if cat.id == category.id %}active{% endif %}"
+                           href="{{ path('catalogue_category', {id: cat.id}) }}">
+                            {{ cat.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h1 class="h3 mb-3">{{ category.name }}</h1>
+
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        {% if product.image %}
+                            <img src="{{ asset('uploads/products/' ~ product.image) }}"
+                                 class="card-img-top"
+                                 alt="{{ product.name }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">
+                                {{ product.description|slice(0, 80) ~ (product.description|length > 80 ? '...' : '') }}
+                            </p>
+                            <div class="fw-bold">{{ product.price }} FCFA</div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-secondary">
+                        Aucun produit dans cette catégorie.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
