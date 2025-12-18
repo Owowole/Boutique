@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier utilisateur{% endblock %}
+
+{% block body %}
+<h1 class="h3 mb-3">Modifier utilisateur</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {{ form_start(form) }}
+
+            {{ form_row(form.email) }}
+            {{ form_row(form.role) }}
+
+            <hr class="my-4">
+
+            <button class="btn btn-outline-secondary mb-3"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#passwordCollapse"
+                    aria-expanded="false"
+                    aria-controls="passwordCollapse">
+                Modifier le mot de passe
+            </button>
+
+            <div class="collapse" id="passwordCollapse">
+                <div class="card card-body mb-3">
+                    {{ form_row(form.plainPassword) }}
+                    <small class="text-muted">
+                        Laissez vide pour ne pas changer le mot de passe.
+                    </small>
+                </div>
+            </div>
+
+            <button class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Annuler</a>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

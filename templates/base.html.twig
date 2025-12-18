@@ -13,6 +13,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
+
         <a class="navbar-brand fw-bold" href="{{ path('catalogue_index') }}">Boutique</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
@@ -25,7 +26,8 @@
                     <a class="nav-link" href="{{ path('catalogue_index') }}">Catalogue</a>
                 </li>
 
-                {% if is_granted('ROLE_ADMIN') %}
+                {# Gestion Produits / Catégories pour ROLE_USER (et donc aussi ROLE_ADMIN) #}
+                {% if is_granted('ROLE_USER') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_product_index') }}">Admin Produits</a>
                     </li>
@@ -33,11 +35,18 @@
                         <a class="nav-link" href="{{ path('app_category_index') }}">Admin Catégories</a>
                     </li>
                 {% endif %}
+
+                {# Gestion des utilisateurs réservée à ROLE_ADMIN #}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_user_index') }}">Admin Utilisateurs</a>
+                    </li>
+                {% endif %}
             </ul>
 
             <ul class="navbar-nav ms-auto">
                 {% if app.user %}
-                    <li class="nav-item">
+                    <li class="nav-item d-flex align-items-center">
                         <span class="nav-link text-warning">
                             {{ app.user.userIdentifier }}
                         </span>
@@ -57,6 +66,15 @@
         </div>
     </div>
 </nav>
+
+{# SECTION UTILISATEUR : message pour ROLE_INTERMEDIAIRE #}
+<div class="container mt-3">
+    {% if app.user and 'ROLE_INTERMEDIAIRE' in app.user.roles and not is_granted('ROLE_USER') %}
+        <div class="alert alert-success">
+            Votre compte est en cours de vérification par un administrateur.
+        </div>
+    {% endif %}
+</div>
 
 <div class="container py-4">
 

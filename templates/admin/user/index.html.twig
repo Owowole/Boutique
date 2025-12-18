@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Utilisateurs{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">Gestion des utilisateurs</h1>
+    <a href="{{ path('app_user_new') }}" class="btn btn-primary">
+        + Créer un utilisateur
+    </a>
+</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label for="roleFilter" class="col-form-label fw-semibold">Filtrer par rôle :</label>
+            </div>
+            <div class="col-auto">
+                <select id="roleFilter" class="form-select form-select-sm">
+                    <option value="">Tous</option>
+                    <option value="ROLE_INTERMEDIAIRE">Intermédiaire</option>
+                    <option value="ROLE_USER">Utilisateur</option>
+                    <option value="ROLE_ADMIN">Administrateur</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Rôles</th>
+                    <th class="text-center">Switch rôle</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                {# rôle principal pour le filtre #}
+                {% set mainRole = (user.roles|first)|default('NONE') %}
+
+                <tr class="user-row" data-role="{{ mainRole }}">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% for role in user.roles %}
+                            <span class="badge bg-secondary">{{ role }}</span>
+                        {% else %}
+                            <span class="badge bg-light text-muted">Aucun</span>
+                        {% endfor %}
+                    </td>
+                    <td class="text-center">
+                        <form method="post"
+                              action="{{ path('app_user_toggle_role', {id: user.id}) }}"
+                              class="d-inline">
+                            <input type="hidden" name="_token"
+                                   value="{{ csrf_token('toggle_role' ~ user.id) }}">
+                            <button class="btn btn-sm btn-outline-warning">
+                                {% if 'ROLE_ADMIN' in user.roles %}
+                                    Basculer en USER
+                                {% elseif 'ROLE_USER' in user.roles %}
+                                    Basculer en ADMIN
+                                {% elseif 'ROLE_INTERMEDIAIRE' in user.roles %}
+                                    Valider (-> USER)
+                                {% else %}
+                                    Définir rôle
+                                {% endif %}
+                            </button>
+                        </form>
+                    </td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary"
+                           href="{{ path('app_user_edit', {id: user.id}) }}">
+                            Modifier
+                        </a>
+
+                        <form method="post"
+                              action="{{ path('app_user_delete', {id: user.id}) }}"
+                              class="d-inline"
+                              onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                            <input type="hidden" name="_token"
+                                   value="{{ csrf_token('delete' ~ user.id) }}">
+                            <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        Aucun utilisateur
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{# Filtre JS simple côté client #}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const select = document.getElementById('roleFilter');
+    const rows = document.querySelectorAll('.user-row');
+
+    select.addEventListener('change', function () {
+        const value = this.value;
+        rows.forEach(row => {
+            const role = row.getAttribute('data-role');
+            if (!value || role === value) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

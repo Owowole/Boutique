@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un utilisateur{% endblock %}
+
+{% block body %}
+<h1 class="h3 mb-3">Créer un utilisateur</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {{ form_start(form) }}
+
+            {{ form_row(form.email) }}
+            {{ form_row(form.role) }}
+            {{ form_row(form.plainPassword) }}
+
+            <button class="btn btn-primary">Créer</button>
+            <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Annuler</a>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
