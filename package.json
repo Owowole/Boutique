@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "ckeditor5": "^47.3.0"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^5.1.0",
+    "core-js": "^3.38.0",
+    "regenerator-runtime": "^0.14.1",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "scripts": {
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production"
+  }
+}

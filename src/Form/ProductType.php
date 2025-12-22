@@ -22,7 +22,14 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['label' => 'Nom'])
-            ->add('description', TextareaType::class, ['label' => 'Description'])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description',
+                'required' => false,
+                'attr' => [
+                    'class' => 'ckeditor',
+                    'rows' => 6
+                ]
+            ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
                 'currency' => 'XOF', // FCFA
