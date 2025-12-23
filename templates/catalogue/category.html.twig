@@ -39,7 +39,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ product.name }}</h5>
                             <p class="card-text">
-                                {{ product.description|slice(0, 80) ~ (product.description|length > 80 ? '...' : '') }}
+                                {{ product.description|raw }}
                             </p>
                             <div class="fw-bold">{{ product.price }} FCFA</div>
                         </div>

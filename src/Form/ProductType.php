@@ -26,9 +26,9 @@ class ProductType extends AbstractType
                 'label' => 'Description',
                 'required' => false,
                 'attr' => [
-                    'class' => 'ckeditor',
-                    'rows' => 6
-                ]
+                    'class' => 'ckeditor', // très important pour le JS
+                    'rows'  => 6,
+                ],
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
